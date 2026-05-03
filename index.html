@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple 12-Week Intern Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Simple Template</p>
+        <h1>12-Week Intern Task and Performance Tracker</h1>
+        <p class="lead">
+          Use this simple weekly table to record daily tasks from Monday to Friday,
+          rate progress, and then add remarks under each week about how the intern performed.
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <form id="weekly-onboarding-form" class="tracker-form">
+        <section class="section-card tools-card">
+          <div class="tools-head">
+            <div>
+              <p class="section-kicker">Fillable Mode</p>
+              <h2>Write, save, print, download, and review later</h2>
+            </div>
+            <!-- <p class="status-note" id="save-status">Your entries autosave in this browser.</p> -->
+          </div>
+
+          <div class="button-row">
+            <button type="button" class="action-btn primary" id="save-now">Save now</button>
+            <button type="button" class="action-btn secondary" id="download-tracker">Download filled copy</button>
+            <button type="button" class="action-btn secondary" id="print-tracker">Print / Save PDF</button>
+            <button type="button" class="action-btn danger" id="clear-form">Clear saved data</button>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-kicker">Basic Details</p>
+            <h2>Who this tracker is for</h2>
+          </div>
+
+          <div class="meta-grid">
+            <label class="field-block">
+              <span class="form-label">Intern Name</span>
+              <input class="text-input" type="text" name="intern_name" placeholder="Enter intern name">
+            </label>
+
+            <label class="field-block">
+              <span class="form-label">Role</span>
+              <input class="text-input" type="text" name="intern_role" placeholder="Example: Front-end intern">
+            </label>
+
+            <label class="field-block">
+              <span class="form-label">Manager</span>
+              <input class="text-input" type="text" name="manager_name" placeholder="Enter manager name">
+            </label>
+
+            <label class="field-block">
+              <span class="form-label">Start Date</span>
+              <input class="text-input" type="date" name="start_date">
+            </label>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-kicker">Rating Guide</p>
+            <h2>Simple way to gauge performance</h2>
+          </div>
+
+          <div class="rating-guide">
+            <div class="rating-box"><strong>1</strong><span>Needs close support</span></div>
+            <div class="rating-box"><strong>2</strong><span>Still learning</span></div>
+            <div class="rating-box"><strong>3</strong><span>Doing okay</span></div>
+            <div class="rating-box"><strong>4</strong><span>Strong progress</span></div>
+            <div class="rating-box"><strong>5</strong><span>Very confident</span></div>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-kicker">Weekly Table</p>
+            <h2>Each week has Monday to Friday rows and one remarks section</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table class="tracker-table">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Tasks Given</th>
+                  <th>Gauge</th>
+                </tr>
+              </thead>
+              <tbody id="weekly-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-kicker">Overall Notes</p>
+            <h2>Simple final summary</h2>
+          </div>
+
+          <div class="summary-grid">
+            <label class="field-block">
+              <span class="form-label">Strong Areas</span>
+              <textarea class="text-area" name="strong_areas" placeholder="What is the intern doing well?"></textarea>
+            </label>
+
+            <label class="field-block">
+              <span class="form-label">Areas to Improve</span>
+              <textarea class="text-area" name="areas_to_improve" placeholder="What still needs improvement?"></textarea>
+            </label>
+
+            <label class="field-block summary-wide">
+              <span class="form-label">Final Comment</span>
+              <textarea class="text-area" name="final_comment" placeholder="Write your overall comment here."></textarea>
+            </label>
+          </div>
+        </section>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('weekly-onboarding-form');
+    const weeklyTableBody = document.getElementById('weekly-table-body');
+    const saveStatus = document.getElementById('save-status');
+    const saveButton = document.getElementById('save-now');
+    const downloadButton = document.getElementById('download-tracker');
+    const clearButton = document.getElementById('clear-form');
+    const printButton = document.getElementById('print-tracker');
+    const storageKey = 'simple-12-week-intern-tracker-v1';
+    let statusTimer;
+    const weekPhases = {
+      1: '30 Days',
+      2: '30 Days',
+      3: '30 Days',
+      4: '30 Days',
+      5: '60 Days',
+      6: '60 Days',
+      7: '60 Days',
+      8: '60 Days',
+      9: '90 Days',
+      10: '90 Days',
+      11: '90 Days',
+      12: '90 Days'
+    };
+    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+    function buildWeeklyTable() {
+      weeklyTableBody.innerHTML = Array.from({ length: 12 }, (_, index) => {
+        const week = index + 1;
+        const phase = weekPhases[week];
+        const dayRows = weekdays.map((day) => {
+          const key = day.toLowerCase();
+
+          return `
+            <tr class="day-row">
+              <td class="day-cell">${day}</td>
+              <td>
+                <textarea class="table-area day-area" name="week${week}_${key}_tasks" placeholder="Tasks given for ${day}"></textarea>
+              </td>
+              <td>
+                <select class="table-select" name="week${week}_${key}_gauge">
+                  <option value="">Select</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        return `
+          <tr class="week-header-row">
+            <th colspan="3" scope="colgroup">Week ${week} <span class="week-phase-note">${phase}</span></th>
+          </tr>
+          ${dayRows}
+          <tr class="remarks-row">
+            <td colspan="3">
+              <label class="remarks-label" for="week${week}_performance">Week ${week} Remarks</label>
+              <textarea class="table-area remarks-area" id="week${week}_performance" name="week${week}_performance" placeholder="Add remarks on how the intern performed in week ${week}."></textarea>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    buildWeeklyTable();
+
+    const fields = form.querySelectorAll('input, textarea, select');
+
+    function setStatus(message) {
+      saveStatus.textContent = message;
+      window.clearTimeout(statusTimer);
+      statusTimer = window.setTimeout(() => {
+        saveStatus.textContent = 'Your entries autosave in this browser.';
+      }, 2200);
+    }
+
+    function collectFormData() {
+      const data = {};
+
+      fields.forEach((field) => {
+        if (!field.name) {
+          return;
+        }
+
+        data[field.name] = field.value;
+      });
+
+      return data;
+    }
+
+    function saveFormData(showMessage = false) {
+      localStorage.setItem(storageKey, JSON.stringify(collectFormData()));
+      if (showMessage) {
+        setStatus('Saved locally.');
+      }
+    }
+
+    function applyCurrentValuesToClone(cloneRoot) {
+      fields.forEach((field) => {
+        if (!field.name) {
+          return;
+        }
+
+        const cloneField = cloneRoot.querySelector(`[name="${field.name}"]`);
+        if (!cloneField) {
+          return;
+        }
+
+        if (cloneField.tagName === 'TEXTAREA') {
+          cloneField.textContent = field.value;
+          return;
+        }
+
+        if (cloneField.tagName === 'SELECT') {
+          Array.from(cloneField.options).forEach((option) => {
+            if (option.value === field.value) {
+              option.setAttribute('selected', 'selected');
+            } else {
+              option.removeAttribute('selected');
+            }
+          });
+          return;
+        }
+
+        cloneField.setAttribute('value', field.value);
+      });
+    }
+
+    function collectInlineStyles() {
+      return Array.from(document.styleSheets).map((sheet) => {
+        try {
+          return Array.from(sheet.cssRules).map((rule) => rule.cssText).join('\n');
+        } catch (error) {
+          return '';
+        }
+      }).join('\n');
+    }
+
+    function downloadFilledCopy() {
+      saveFormData(false);
+
+      const exportRoot = document.documentElement.cloneNode(true);
+      const exportStyles = collectInlineStyles();
+      const exportBody = exportRoot.querySelector('body');
+      const exportHead = exportRoot.querySelector('head');
+
+      applyCurrentValuesToClone(exportRoot);
+
+      exportRoot.querySelectorAll('script').forEach((script) => script.remove());
+      exportRoot.querySelectorAll('link[rel="stylesheet"]').forEach((link) => link.remove());
+
+      const exportToolsCard = exportRoot.querySelector('.tools-card');
+      if (exportToolsCard) {
+        exportToolsCard.remove();
+      }
+
+      const styleTag = document.createElement('style');
+      styleTag.textContent = exportStyles;
+      exportHead.appendChild(styleTag);
+
+      exportBody.classList.add('export-copy');
+
+      const fileName = `intern-tracker-filled-copy-${new Date().toISOString().slice(0, 10)}.html`;
+      const html = '<!DOCTYPE html>\n' + exportRoot.outerHTML;
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+
+      setStatus('Downloaded filled copy.');
+    }
+
+    function restoreFormData() {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) {
+        return;
+      }
+
+      let savedData;
+
+      try {
+        savedData = JSON.parse(raw);
+      } catch (error) {
+        localStorage.removeItem(storageKey);
+        return;
+      }
+
+      fields.forEach((field) => {
+        if (!field.name || !(field.name in savedData)) {
+          return;
+        }
+
+        field.value = savedData[field.name];
+      });
+    }
+
+    form.addEventListener('input', () => saveFormData(false));
+    form.addEventListener('change', () => saveFormData(false));
+    window.addEventListener('beforeunload', () => saveFormData(false));
+    saveButton.addEventListener('click', () => saveFormData(true));
+    downloadButton.addEventListener('click', downloadFilledCopy);
+
+    clearButton.addEventListener('click', () => {
+      const shouldClear = window.confirm('Clear all typed entries from this browser?');
+      if (!shouldClear) {
+        return;
+      }
+
+      localStorage.removeItem(storageKey);
+      form.reset();
+      setStatus('Saved data cleared.');
+    });
+
+    printButton.addEventListener('click', () => window.print());
+
+    restoreFormData();
+  </script>
+</body>
+</html>
