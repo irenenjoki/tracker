@@ -143,7 +143,8 @@ h2 {
 
 .meta-grid,
 .summary-grid,
-.rating-guide {
+.rating-guide,
+.milestone-grid {
   display: grid;
   gap: 1rem;
 }
@@ -164,12 +165,58 @@ h2 {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
+.milestone-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .rating-box {
   padding: 0.9rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: #fbfcfd;
   text-align: center;
+}
+
+.milestone-card {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, #fbfcfd 0%, #f4f8f6 100%);
+}
+
+.milestone-card h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1.1rem;
+}
+
+.milestone-phase,
+.milestone-label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.milestone-phase {
+  margin-bottom: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--green);
+}
+
+.milestone-label {
+  margin-top: 0.95rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.milestone-list {
+  margin: 0.55rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--ink);
+}
+
+.milestone-list li + li {
+  margin-top: 0.45rem;
 }
 
 .rating-box strong {
@@ -303,7 +350,8 @@ h2 {
 @media (max-width: 980px) {
   .meta-grid,
   .summary-grid,
-  .rating-guide {
+  .rating-guide,
+  .milestone-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -326,7 +374,8 @@ h2 {
 
   .meta-grid,
   .summary-grid,
-  .rating-guide {
+  .rating-guide,
+  .milestone-grid {
     grid-template-columns: 1fr;
   }
 }

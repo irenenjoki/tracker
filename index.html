@@ -84,8 +84,73 @@
 
         <section class="section-card">
           <div class="section-heading">
+            <p class="section-kicker">Expected Milestones</p>
+            <h2>What success looks like at 30, 60, and 90 days</h2>
+          </div>
+
+          <div class="milestone-grid">
+            <article class="milestone-card">
+              <p class="milestone-phase">30 Days</p>
+              <h3>Build your foundation</h3>
+              <p class="milestone-label">Goals</p>
+              <ul class="milestone-list">
+                <li>Understand company workflow</li>
+                <li>Write basic HTML, CSS, and JavaScript</li>
+                <li>Push code to GitHub</li>
+                <li>Communicate clearly with mentor</li>
+              </ul>
+              <p class="milestone-label">Success Metrics</p>
+              <ul class="milestone-list">
+                <li>Completed onboarding tasks</li>
+                <li>Can build a simple responsive page</li>
+                <li>Makes basic commits to GitHub</li>
+                <li>Shows understanding of fundamentals</li>
+              </ul>
+            </article>
+
+            <article class="milestone-card">
+              <p class="milestone-phase">60 Days</p>
+              <h3>Start contributing with confidence</h3>
+              <p class="milestone-label">Goals</p>
+              <ul class="milestone-list">
+                <li>Build small features independently</li>
+                <li>Work with APIs</li>
+                <li>Use Git properly with commits and branches</li>
+                <li>Start contributing to real project work</li>
+              </ul>
+              <p class="milestone-label">Success Metrics</p>
+              <ul class="milestone-list">
+                <li>Completes tasks with minimal help</li>
+                <li>Writes cleaner, structured code</li>
+                <li>Handles API data correctly</li>
+                <li>Participates in discussions</li>
+              </ul>
+            </article>
+
+            <article class="milestone-card">
+              <p class="milestone-phase">90 Days</p>
+              <h3>Operate like a dependable teammate</h3>
+              <p class="milestone-label">Goals</p>
+              <ul class="milestone-list">
+                <li>Work independently on tasks</li>
+                <li>Deliver production-ready features</li>
+                <li>Show strong problem-solving ability</li>
+              </ul>
+              <p class="milestone-label">Success Metrics</p>
+              <ul class="milestone-list">
+                <li>Owns tasks end-to-end</li>
+                <li>Writes clean, maintainable code</li>
+                <li>Meets deadlines</li>
+                <li>Requires minimal supervision</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
             <p class="section-kicker">Weekly Table</p>
-            <h2>Each week has Monday to Friday rows and one remarks section</h2>
+            <!-- <h2>Each week has Monday to Friday rows and one remarks section</h2> -->
           </div>
 
           <div class="table-wrap">
@@ -202,6 +267,10 @@
     const fields = form.querySelectorAll('input, textarea, select');
 
     function setStatus(message) {
+      if (!saveStatus) {
+        return;
+      }
+
       saveStatus.textContent = message;
       window.clearTimeout(statusTimer);
       statusTimer = window.setTimeout(() => {
