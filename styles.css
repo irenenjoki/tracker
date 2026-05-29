@@ -272,79 +272,65 @@ h2 {
   border-color: var(--green);
 }
 
-.table-wrap {
-  overflow-x: auto;
+.monthly-stack {
+  display: grid;
+  gap: 1rem;
 }
 
-.tracker-table {
-  width: 100%;
-  min-width: 760px;
-  border-collapse: collapse;
-}
-
-.tracker-table th,
-.tracker-table td {
-  padding: 0.8rem;
+.monthly-card {
+  padding: 1rem;
   border: 1px solid var(--line);
-  text-align: left;
-  vertical-align: top;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, #fbfcfd 0%, #f4f8f6 100%);
 }
 
-.tracker-table th {
-  background: #f3f6f8;
-  font-size: 0.86rem;
+.monthly-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.tracker-table td:nth-child(1),
-.tracker-table td:nth-child(3) {
-  white-space: nowrap;
+.monthly-card-title {
+  min-width: 0;
 }
 
-.week-header-row th {
-  padding: 0.9rem 0.8rem;
-  background: var(--green);
-  color: #ffffff;
-  font-size: 0.95rem;
-  text-align: left;
-}
-
-.week-phase-note {
-  margin-left: 0.5rem;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.day-row td {
-  background: #ffffff;
-}
-
-.day-cell {
-  min-width: 120px;
+.month-badge {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 0.84rem;
   font-weight: 700;
-}
-
-.day-area {
-  min-height: 92px;
-}
-
-.remarks-row td {
-  background: #fafcfd;
-  padding: 0.95rem 0.8rem 1rem;
-}
-
-.remarks-label {
-  display: block;
-  margin-bottom: 0.45rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: var(--green);
 }
 
+.gauge-field {
+  width: min(180px, 100%);
+}
+
+.month-remarks-block {
+  margin-top: 0.9rem;
+}
+
+.month-phase-note {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.month-area,
 .remarks-area {
-  min-height: 96px;
+  min-height: 110px;
 }
 
 @media (max-width: 980px) {
@@ -370,6 +356,14 @@ h2 {
   .tools-head {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .monthly-card-head {
+    flex-direction: column;
+  }
+
+  .gauge-field {
+    width: 100%;
   }
 
   .meta-grid,

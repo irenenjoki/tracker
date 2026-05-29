@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple 12-Week Intern Tracker</title>
+  <title>Simple 3-Month Intern Tracker</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,16 +11,16 @@
     <header class="hero">
       <div>
         <p class="eyebrow">Simple Template</p>
-        <h1>12-Week Intern Task and Performance Tracker</h1>
+        <h1>3-Month Intern Task and Performance Tracker</h1>
         <p class="lead">
-          Use this simple weekly table to record daily tasks from Monday to Friday,
-          rate progress, and then add remarks under each week about how the intern performed.
+          Use this simple monthly tracker to record the main tasks, progress, and remarks
+          for Month 1, Month 2, and Month 3.
         </p>
       </div>
     </header>
 
     <main>
-      <form id="weekly-onboarding-form" class="tracker-form">
+      <form id="monthly-onboarding-form" class="tracker-form">
         <section class="section-card tools-card">
           <div class="tools-head">
             <div>
@@ -149,22 +149,11 @@
 
         <section class="section-card">
           <div class="section-heading">
-            <p class="section-kicker">Weekly Table</p>
-            <!-- <h2>Each week has Monday to Friday rows and one remarks section</h2> -->
+            <p class="section-kicker">Monthly Tracker</p>
+            <h2>Track progress month by month</h2>
           </div>
 
-          <div class="table-wrap">
-            <table class="tracker-table">
-              <thead>
-                <tr>
-                  <th>Day</th>
-                  <th>Tasks Given</th>
-                  <th>Gauge</th>
-                </tr>
-              </thead>
-              <tbody id="weekly-table-body"></tbody>
-            </table>
-          </div>
+          <div class="monthly-stack" id="monthly-sections"></div>
         </section>
 
         <section class="section-card">
@@ -195,46 +184,37 @@
   </div>
 
   <script>
-    const form = document.getElementById('weekly-onboarding-form');
-    const weeklyTableBody = document.getElementById('weekly-table-body');
+    const form = document.getElementById('monthly-onboarding-form');
+    const monthlySections = document.getElementById('monthly-sections');
     const saveStatus = document.getElementById('save-status');
     const saveButton = document.getElementById('save-now');
     const downloadButton = document.getElementById('download-tracker');
     const clearButton = document.getElementById('clear-form');
     const printButton = document.getElementById('print-tracker');
-    const storageKey = 'simple-12-week-intern-tracker-v1';
+    const storageKey = 'simple-3-month-intern-tracker-v1';
     let statusTimer;
-    const weekPhases = {
+    const monthPhases = {
       1: '30 Days',
-      2: '30 Days',
-      3: '30 Days',
-      4: '30 Days',
-      5: '60 Days',
-      6: '60 Days',
-      7: '60 Days',
-      8: '60 Days',
-      9: '90 Days',
-      10: '90 Days',
-      11: '90 Days',
-      12: '90 Days'
+      2: '60 Days',
+      3: '90 Days'
     };
-    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-    function buildWeeklyTable() {
-      weeklyTableBody.innerHTML = Array.from({ length: 12 }, (_, index) => {
-        const week = index + 1;
-        const phase = weekPhases[week];
-        const dayRows = weekdays.map((day) => {
-          const key = day.toLowerCase();
+    function buildMonthlySections() {
+      monthlySections.innerHTML = Array.from({ length: 3 }, (_, index) => {
+        const month = index + 1;
+        const phase = monthPhases[month];
 
-          return `
-            <tr class="day-row">
-              <td class="day-cell">${day}</td>
-              <td>
-                <textarea class="table-area day-area" name="week${week}_${key}_tasks" placeholder="Tasks given for ${day}"></textarea>
-              </td>
-              <td>
-                <select class="table-select" name="week${week}_${key}_gauge">
+        return `
+          <article class="monthly-card">
+            <div class="monthly-card-head">
+              <div class="monthly-card-title">
+                <p class="month-badge">Month ${month}</p>
+                <span class="month-phase-note">${phase}</span>
+              </div>
+
+              <label class="field-block gauge-field">
+                <span class="form-label">Gauge</span>
+                <select class="table-select" name="month${month}_gauge">
                   <option value="">Select</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -242,27 +222,24 @@
                   <option value="4">4</option>
                   <option value="5">5</option>
                 </select>
-              </td>
-            </tr>
-          `;
-        }).join('');
+              </label>
+            </div>
 
-        return `
-          <tr class="week-header-row">
-            <th colspan="3" scope="colgroup">Week ${week} <span class="week-phase-note">${phase}</span></th>
-          </tr>
-          ${dayRows}
-          <tr class="remarks-row">
-            <td colspan="3">
-              <label class="remarks-label" for="week${week}_performance">Week ${week} Remarks</label>
-              <textarea class="table-area remarks-area" id="week${week}_performance" name="week${week}_performance" placeholder="Add remarks on how the intern performed in week ${week}."></textarea>
-            </td>
-          </tr>
+            <label class="field-block">
+              <span class="form-label">Tasks / Highlights</span>
+              <textarea class="table-area month-area" name="month${month}_tasks" placeholder="Main tasks, goals, or highlights for Month ${month}."></textarea>
+            </label>
+
+            <label class="field-block month-remarks-block">
+              <span class="form-label">Remarks</span>
+              <textarea class="table-area remarks-area" name="month${month}_remarks" placeholder="Add remarks for Month ${month}."></textarea>
+            </label>
+          </article>
         `;
       }).join('');
     }
 
-    buildWeeklyTable();
+    buildMonthlySections();
 
     const fields = form.querySelectorAll('input, textarea, select');
 
@@ -364,7 +341,7 @@
 
       exportBody.classList.add('export-copy');
 
-      const fileName = `intern-tracker-filled-copy-${new Date().toISOString().slice(0, 10)}.html`;
+      const fileName = `intern-3-month-tracker-filled-copy-${new Date().toISOString().slice(0, 10)}.html`;
       const html = '<!DOCTYPE html>\n' + exportRoot.outerHTML;
       const blob = new Blob([html], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
